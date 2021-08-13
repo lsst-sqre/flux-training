@@ -6,7 +6,29 @@ Material for InfluxData Flux training
 
 See slides for an [introduction to Rubin Observatory Engineering data](https://docs.google.com/presentation/d/1IKkXgbv779qJSFCCzP-NYrVARHqnjuoP-X4f1eT8HFs/edit?usp=sharing).
 
-## Problem 1: Monitoring Sate Transitions
+## Example 1: Telescope closing condition
+
+The telescopes at Rubin Observatory should close if there is any risk of condensation to avoid water forming on the telescope optics or other equipments.
+
+The year average relative humidity at Cerro Pachon, where Rubin Observatory is located, is about 25%, but it varies a lot along the year.
+
+As a general rule, when the relative humidity exceeds 90% the telescopes should close immediately, but the 90% rule is not enough to determine the closing condition as we can have condensation happenning at lower relative humidity.
+
+A better protection against condensation can be obtained if the air temperature at the telescope is compared to the dew point. The higher the dew point rises, the greater the amount of moisture in the air. When the air temperature meet the dew point water will form. So the telescopes should be closed before that. The figure shows this condition happenning on Aug 8 2021, when the relative humidity reached 88%.
+
+You’ll work with a dataset from the Weather Station at Rubin Observatory's collected in early August 2021.
+
+Create a bucket called “Rubin” and import the following annotated CSV file to [InfluxDB Cloud](https://cloud2.influxdata.com).
+
+- WeatherStation.csv (Weather Station data)
+
+![Condensation](figs/condensation.png)
+
+Goal:
+
+Use the `holtWinters()` function (or possibly another method) to predict when the dew point and the air temperature approach each other.  Create an alert rule to notify the observers 2h in advance about this condition.
+
+## Example 2: Monitoring Sate Transitions
 
 With multiple devices running simultaneously at Rubin Observatory *Monitoring State Transitions* help astronomers and engineers
 to understand in which state a device is and how it responds to commands executed by the Observatory Control System.
@@ -21,9 +43,9 @@ OFFLINE = 4
 STANDBY = 5
 ```
 
-You’ll work with a dataset comprising one month of data from the Rubin Observatory Auxiliary Telescope (AuxTel).
+You’ll work with a dataset comprising one month of data from Rubin Observatory Auxiliary Telescope (AuxTel).
 
-This data was recorded to the Rubin Observatory Engineering database in June/July 2021, only a few months after the Rubin staff resumed testing and integration activities at the Observatory in Chile due to the pandemic.
+This data was recorded to Rubin Observatory's Engineering database in June/July 2021, a few months after the Rubin staff resumed testing and integration activities at the Observatory in Chile due to the pandemic.
 
 The summary state data is organized in 11 [annotated CSV files](https://www.influxdata.com/blog/tldr-tech-tips-how-to-interpret-an-annotated-csv/), each file has data for a different AuxTel device.
 
@@ -249,7 +271,7 @@ from(bucket: "auxtel")
   |> keep(columns: ["_time", "device", "state"])
 ```
 
-## Problem 2: Monitoring Downtime
+## Example 3: Monitoring Downtime
 
 ![AuxTel Downtime](figs/auxtel-downtime.png)
 
